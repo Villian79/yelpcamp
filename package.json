@@ -1,0 +1,22 @@
+{
+  "name": "yelpcamp",
+  "version": "1.0.0",
+  "description": "Web App based on a tutorial by C.Steele",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Villian79/yelpcamp.git"
+  },
+  "author": "Igor Vilinchuk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Villian79/yelpcamp/issues"
+  },
+  "homepage": "https://github.com/Villian79/yelpcamp#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
