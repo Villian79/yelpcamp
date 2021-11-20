@@ -8,6 +8,10 @@ const port = 3000;
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+//Middleware to handle JSON requests
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 //Test route
 app.get('/', (req, res) => {
     res.render('index', { name: 'Brother!' });
