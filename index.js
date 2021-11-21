@@ -4,7 +4,6 @@ const path = require('path');
 const mongoose = require('mongoose');
 
 const Campground = require('./models/campground');
-const CampgroundSchema = require('./models/campground');
 
 const port = 3000;
 
