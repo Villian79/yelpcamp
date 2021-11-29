@@ -28,11 +28,9 @@ app.get('/', (req, res) => {
     res.render('index', { name: 'Brother!' });
 });
 
-//Route to create a test DB entry to check if it works
-app.get('/campground', async (req, res) => {
-    const camp = new Campground({ title: 'Test Campground', price: '2.0', description: 'This is a test campground', location: 'California' });
-    await camp.save();
-    res.send(camp);
+app.get('/campgrounds', async (req, res) => {
+    const campgrounds = await Campground.find({});
+    res.render('campgrounds/index.ejs', { campgrounds });
 });
 
 
