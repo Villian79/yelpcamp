@@ -30,15 +30,24 @@ app.get('/', (req, res) => {
 
 app.get('/campgrounds', async (req, res) => {
     const campgrounds = await Campground.find({});
-    res.render('campgrounds/index.ejs', { campgrounds });
+    res.render('campgrounds/index', { campgrounds });
+});
+
+app.get('/campgrounds/new', (req, res) => {
+    res.render('campgrounds/new');
 });
 
 app.get('/campgrounds/:id', async (req, res) => {
     const id = req.params.id;
     const campground = await Campground.findById(id);
-    res.render('campgrounds/show.ejs', { campground });
+    res.render('campgrounds/show', { campground });
 });
 
+app.post('/campgrounds', async (req, res) => {
+    const newCampground = new Campground(req.body.campground);
+    await newCampground.save();
+    res.redirect(`/campgrounds/${newCampground._id}`);
+});
 
 //Start server
 app.listen(port, () => {
