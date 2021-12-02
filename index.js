@@ -59,7 +59,7 @@ app.get('/campgrounds/:id/edit', async (req, res) => {
 //Edit Campground Route
 app.put('/campgrounds/:id', async (req, res) => {
     const { id } = req.params;
-    const editedCampground = await Campground.findByIdAndUpdate(id, req.body.campground);
+    await Campground.findByIdAndUpdate(id, req.body.campground);
     res.redirect(`/campgrounds/${id}`);
 });
 
@@ -68,6 +68,13 @@ app.post('/campgrounds', async (req, res) => {
     const newCampground = new Campground(req.body.campground);
     await newCampground.save();
     res.redirect(`/campgrounds/${newCampground._id}`);
+});
+
+//Delete Route
+app.delete('/campgrounds/:id', async (req, res) => {
+    const { id } = req.params;
+    await Campground.findByIdAndDelete(id);
+    res.redirect('/campgrounds');
 });
 
 //Start server
