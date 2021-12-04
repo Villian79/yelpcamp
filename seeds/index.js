@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 const cities = require('./cities');
-const photos = require('./photos');
+// const photos = require('./photos');
+const photos = require('./photo');
 const { places, descriptors } = require('./seedHelpers');
 const Campground = require('../models/campground');
 
 const port = 3000;
-
-console.log(typeof (photos[0].urls));
 
 //Connecting to MongoDB locally
 mongoose.connect('mongodb://localhost:27017/yelp-camp')
@@ -30,7 +29,8 @@ const seedDB = async () => {
                 regular: randomPhoto.urls.regular,
                 small: randomPhoto.urls.small,
                 thumb: randomPhoto.urls.thumb
-            }
+            },
+            description: randomPhoto.alt_description
         });
         await camp.save();
     }
