@@ -5,9 +5,14 @@ const Schema = mongoose.Schema;
 //Test Campground Schema
 const CampgroundSchema = new Schema({
     title: String,
-    price: String,
+    price: Number,
     description: String,
-    location: String
+    location: String,
+    photoUrl: {
+        regular: String,
+        small: String,
+        thumb: String
+    }
 });
 
 const Campground = mongoose.model('Campground', CampgroundSchema);
