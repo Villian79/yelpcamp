@@ -1,4 +1,4 @@
-[
+module.exports = [
     {
         "id": "eDgUyGu93Yw",
         "created_at": "2017-10-24T15:36:36-04:00",
@@ -18,7 +18,7 @@
             "thumb": "https://images.unsplash.com/photo-1508873696983-2dfd5898f08b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyODA0Njd8MHwxfGNvbGxlY3Rpb258MXwyMTg4NTU5fHx8fHwyfHwxNjM4NjM5MTA1&ixlib=rb-1.2.1&q=80&w=200"
         },
         "links": {
-            "self": module.exports = "https://api.unsplash.com/photos/eDgUyGu93Yw",
+            "self": "https://api.unsplash.com/photos/eDgUyGu93Yw",
             "html": "https://unsplash.com/photos/eDgUyGu93Yw",
             "download": "https://unsplash.com/photos/eDgUyGu93Yw/download?ixid=MnwyODA0Njd8MHwxfGNvbGxlY3Rpb258MXwyMTg4NTU5fHx8fHwyfHwxNjM4NjM5MTA1",
             "download_location": "https://api.unsplash.com/photos/eDgUyGu93Yw/download?ixid=MnwyODA0Njd8MHwxfGNvbGxlY3Rpb258MXwyMTg4NTU5fHx8fHwyfHwxNjM4NjM5MTA1"
