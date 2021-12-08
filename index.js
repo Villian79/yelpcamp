@@ -6,6 +6,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 
 const Campground = require('./models/campground');
+const catchAsync = require('./utils/catchAsync');
 
 const port = 3000;
 
@@ -45,38 +46,43 @@ app.get('/campgrounds/new', (req, res) => {
 });
 
 //Show Route
-app.get('/campgrounds/:id', async (req, res) => {
+app.get('/campgrounds/:id', catchAsync(async (req, res) => {
     const id = req.params.id;
     const campground = await Campground.findById(id);
     res.render('campgrounds/show', { campground });
-});
+}));
 
 //Edit form Route
-app.get('/campgrounds/:id/edit', async (req, res) => {
+app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
     const id = req.params.id;
     const campground = await Campground.findById(id);
     res.render('campgrounds/edit', { campground });
-});
+}));
 
 //Edit Campground Route
-app.put('/campgrounds/:id', async (req, res) => {
+app.put('/campgrounds/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndUpdate(id, req.body.campground);
     res.redirect(`/campgrounds/${id}`);
-});
+}));
 
 //Create New route
-app.post('/campgrounds', async (req, res) => {
-    const newCampground = new Campground(req.body.campground);
-    await newCampground.save();
-    res.redirect(`/campgrounds/${newCampground._id}`);
-});
+app.post('/campgrounds', catchAsync(async (req, res, next) => {
+        const newCampground = new Campground(req.body.campground);
+        await newCampground.save();
+        res.redirect(`/campgrounds/${newCampground._id}`);    
+}));
 
 //Delete Route
-app.delete('/campgrounds/:id', async (req, res) => {
+app.delete('/campgrounds/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
     res.redirect('/campgrounds');
+}));
+
+//Basic error handling middleware
+app.use((err, req, res, next) => {
+    res.send(`Error: ${err.name} -- ${err.message}`);
 });
 
 //Start server
