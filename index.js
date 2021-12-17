@@ -7,6 +7,7 @@ const ejsMate = require('ejs-mate');
 
 const Campground = require('./models/campground');
 const catchAsync = require('./utils/catchAsync');
+const ExpresError = require('./utils/ExpressError');
 
 const port = 3000;
 
@@ -24,8 +25,9 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 //Middleware to handle JSON requests
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 //Middleware for method override to be able to use PUT and PATCH requests in forms
 app.use(methodOverride('_method'));
 
@@ -67,7 +69,8 @@ app.put('/campgrounds/:id', catchAsync(async (req, res) => {
 }));
 
 //Create New route
-app.post('/campgrounds', catchAsync(async (req, res, next) => {
+app.post('/campgrounds', catchAsync(async (req, res) => {
+        if(!req.body.campground) throw new ExpresError('Invalid campground data', 400);
         const newCampground = new Campground(req.body.campground);
         await newCampground.save();
         res.redirect(`/campgrounds/${newCampground._id}`);    
@@ -80,9 +83,16 @@ app.delete('/campgrounds/:id', catchAsync(async (req, res) => {
     res.redirect('/campgrounds');
 }));
 
+//404 Route to handle invalid URLs
+app.all('*', (req, res, next) => {
+    next(new ExpresError('Page Not Found', 404));
+});
+
 //Basic error handling middleware
 app.use((err, req, res, next) => {
-    res.send(`Error: ${err.name} -- ${err.message}`);
+    const {statusCode = 500} = err;
+    if(!err.message) err.message = 'Oh NO! Something went terribly wrong!!!';
+    res.status(statusCode).render('error', {err});
 });
 
 //Start server
