@@ -4,6 +4,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
+const Joi = require('joi');
 
 const Campground = require('./models/campground');
 const catchAsync = require('./utils/catchAsync');
@@ -70,7 +71,24 @@ app.put('/campgrounds/:id', catchAsync(async (req, res) => {
 
 //Create New route
 app.post('/campgrounds', catchAsync(async (req, res) => {
-        if(!req.body.campground) throw new ExpresError('Invalid campground data', 400);
+        // if(!req.body.campground) throw new ExpresError('Invalid campground data', 400);
+
+        //Validation of the request to add a new campground using Joi
+        const campgroundSchema = Joi.object({
+            campground: Joi.object({
+                title: Joi.string().required(),
+                price: Joi.number().min(1).integer.required(),
+                location: Joi.string().required(),
+                description: Joi.string().required(),
+                photoUrl: Joi.string().required()
+            }).required()
+        });
+        const {error} = campgroundSchema.validate(req.body);
+        if(error){
+            const errorMessage = error.details.map(el => el.message).join(', ');
+            throw new ExpresError(errorMessage, 400);
+        }
+        
         const newCampground = new Campground(req.body.campground);
         await newCampground.save();
         res.redirect(`/campgrounds/${newCampground._id}`);    
