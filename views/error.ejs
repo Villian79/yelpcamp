@@ -4,9 +4,9 @@
     <div class="col-8 offset-2">
         <div class="alert alert-danger" role="alert">
             <h4 class="alert-heading">Error!</h4>
-            <p>Request Status Code: <%= err.statusCode %></p>
+            <div style="overflow-wrap: break-word;"><%= err.message %></div>
             <hr>
-            <div style="overflow-wrap: break-word;"><%= err.stack %></div>
+            <p>Request Status Code: <%= err.statusCode %></p>
         </div>
     </div>
 </div>
