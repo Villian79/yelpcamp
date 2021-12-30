@@ -4,11 +4,11 @@ const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
-const Joi = require('joi');
 
 const Campground = require('./models/campground');
 const catchAsync = require('./utils/catchAsync');
 const ExpresError = require('./utils/ExpressError');
+const {campgroundSchema} = require('./schemas');
 
 const port = 3000;
 
@@ -31,6 +31,18 @@ app.use(express.urlencoded({ extended: true }));
 
 //Middleware for method override to be able to use PUT and PATCH requests in forms
 app.use(methodOverride('_method'));
+
+const validateCampground = (req, res, next) => {
+    //Validation of the request to add a new campground using Joi
+    //campgroundSchema is defined in ./schemas.js
+    const {error} = campgroundSchema.validate(req.body);
+    if(error){
+        const errorMessage = error.details.map(el => el.message).join(', ');
+        throw new ExpresError(errorMessage, 400);
+    } else {
+        next();
+    }
+}
 
 //Test route
 app.get('/', (req, res) => {
@@ -63,32 +75,16 @@ app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
 }));
 
 //Edit Campground Route
-app.put('/campgrounds/:id', catchAsync(async (req, res) => {
+app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndUpdate(id, req.body.campground);
     res.redirect(`/campgrounds/${id}`);
 }));
 
 //Create New route
-app.post('/campgrounds', catchAsync(async (req, res) => {
+app.post('/campgrounds', validateCampground, catchAsync(async (req, res) => {
         // if(!req.body.campground) throw new ExpresError('Invalid campground data', 400);
 
-        //Validation of the request to add a new campground using Joi
-        const campgroundSchema = Joi.object({
-            campground: Joi.object({
-                title: Joi.string().required(),
-                price: Joi.number().min(1).integer.required(),
-                location: Joi.string().required(),
-                description: Joi.string().required(),
-                photoUrl: Joi.string().required()
-            }).required()
-        });
-        const {error} = campgroundSchema.validate(req.body);
-        if(error){
-            const errorMessage = error.details.map(el => el.message).join(', ');
-            throw new ExpresError(errorMessage, 400);
-        }
-        
         const newCampground = new Campground(req.body.campground);
         await newCampground.save();
         res.redirect(`/campgrounds/${newCampground._id}`);    
