@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-6 offset-3 mb-5">
-        <div class="card">
+        <div class="card" class="mb-3">
             <img src="<%= campground.photoUrl %> " class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title"><%= campground.title %> </h5>
@@ -22,6 +22,20 @@
                 <span>Last seen 2 days ago</span>
                 <a href="/campgrounds" class="btn btn-info text-right">All Campgrounds</a>
             </div>
+        </div>
+        <h3>Leave A Review:</h3>
+        <div>
+            <form action="" class="mb-3">
+                <div class="mb-3">
+                    <label class="form-label" for="rating">Rating:</label>
+                    <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="body">Review:</label>
+                    <textarea class="form-control" name="review[body]" id="body" cols="30" rows="5"></textarea>
+                </div>
+                <button class="btn btn-success">Submit!</button>
+            </form>
         </div>
     </div>
 </div>
